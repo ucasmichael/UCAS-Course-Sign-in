@@ -25,7 +25,7 @@ jobs:
         shell: bash
         run: |
           set -o pipefail
-          npx --yes vercel@latest deploy --temporary 2>&1 | tee vercel-deploy.log
+          script -q -e -c 'npx --yes vercel@latest deploy --temporary' /dev/null 2>&1 | tee vercel-deploy.log
           deployment_url=$(grep -Eo 'https://[A-Za-z0-9.-]+\.vercel\.app' vercel-deploy.log | tail -n 1)
           if [ -z "$deployment_url" ]; then
             echo "No deployment URL found" >&2
