@@ -32,6 +32,8 @@ type ScheduleResponse = {
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+// Keep this route's serverless bundle distinct from the sign endpoint on Vercel.
+export const maxDuration = 15;
 
 const RESPONSE_HEADERS = {
 	"Cache-Control": "no-store",
