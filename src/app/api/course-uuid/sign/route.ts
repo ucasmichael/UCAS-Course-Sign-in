@@ -67,6 +67,7 @@ class ApiError extends Error {
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+export const maxDuration = 16;
 
 function jsonWithHeaders(body: unknown, init: { status: number; headers?: Record<string, string> }) {
 	return NextResponse.json(body, {

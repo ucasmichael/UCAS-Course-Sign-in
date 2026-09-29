@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+export const maxDuration = 17;
 
 const TIMESTAMP_URL = "https://iclass.ucas.edu.cn:8181/app/common/get_timestamp.do";
 const API_UA = "student_5.0.1.2_android_12_20_100000000000000_110000";
