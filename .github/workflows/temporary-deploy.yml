@@ -23,6 +23,8 @@ jobs:
 
       - name: Deploy anonymously to Vercel
         shell: bash
+        env:
+          CI: "false"
         run: |
           set -o pipefail
           script -q -e -c 'npx --yes vercel@latest deploy --temporary' /dev/null 2>&1 | tee vercel-deploy.log
