@@ -59,6 +59,44 @@ npm run start
 npm run lint
 ```
 
+### Windows + Conda 本地运行
+
+本项目需要 Node.js 和 npm，不需要 Python 或数据库。可以用独立的 Conda 环境管理 Node.js，避免影响已有环境。
+
+首次安装（PowerShell）：
+
+```powershell
+cd E:\UCAS-Course-Sign-in
+conda env create -f environment.yml
+conda activate ucas-signin
+node --version
+npm.cmd --version
+npm.cmd ci
+```
+
+如果已经创建了 `ucas-signin` 环境，跳过 `conda env create`。`npm.cmd ci` 按锁文件安装依赖；使用 `npm.cmd` 可避免 PowerShell 脚本执行策略对 npm 的影响。
+
+开发模式（修改代码后自动刷新）：
+
+```powershell
+cd E:\UCAS-Course-Sign-in
+conda activate ucas-signin
+npm.cmd run dev -- --hostname 127.0.0.1
+```
+
+浏览器打开 <http://localhost:3000>，终端按 `Ctrl+C` 停止服务。
+
+生产模式（先停止开发服务，再执行）：
+
+```powershell
+npm.cmd run build
+npm.cmd run start -- --hostname 127.0.0.1
+```
+
+构建成功后，后续启动只需激活环境并执行 `npm.cmd run start -- --hostname 127.0.0.1`；修改代码后需要重新构建。代码检查命令为 `npm.cmd run lint`。
+
+默认无需创建 `.env` 文件。首次开发编译及生产构建需要下载 Google 字体；查询课程和签到需要本机网络能访问国科大接口。若 3000 端口已占用，可在启动命令末尾追加 `--port 3001`，然后访问 <http://localhost:3001>。
+
 ### 部署上线（可选）
 
 推荐使用 Vercel 进行部署，步骤如下：

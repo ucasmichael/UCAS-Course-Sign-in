@@ -316,7 +316,21 @@ export async function POST(req: NextRequest) {
 		const userId = loginData?.result?.id;
 
 		if (loginData?.STATUS !== "0" || !sessionId || !userId) {
-			return jsonWithHeaders({ message: "登录失败，请检查学号密码是否正确" }, { status: 401 });
+			// Only expose a short numeric status; upstream payloads may contain credentials.
+			const upstreamStatus = /^-?\d{1,6}$/.test(String(loginData?.STATUS))
+				? String(loginData.STATUS)
+				: "unknown";
+			const incompleteResponse = loginData?.STATUS === "0" || upstreamStatus === "unknown";
+			return jsonWithHeaders(
+				{
+					message: incompleteResponse
+						? "iClass 登录返回数据不完整或格式不兼容，无法取得登录凭据；这不代表密码错误。"
+						: `iClass 登录未通过（上游状态：${upstreamStatus}）。SEP 登录成功不能确认此接口可用，请核对同一学号和密码能否登录官方 iClass／爱课堂 App。`,
+					code: incompleteResponse ? "UPSTREAM_LOGIN_INVALID_RESPONSE" : "UPSTREAM_LOGIN_REJECTED",
+					upstreamStatus,
+				},
+				{ status: incompleteResponse ? 502 : 401 },
+			);
 		}
 
 		stage = "schedule";
